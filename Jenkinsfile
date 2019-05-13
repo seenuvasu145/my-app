@@ -12,6 +12,27 @@
        Thanks
        seenu''', cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: '', subject: 'Jenkins Job', to: 'vasucena145@gmail.com'
     }
+    
+    post {
+        failure {
+            script {
+                mail (to: 'vasucena145@gmail.com',
+                        subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
+                        body: "Please visit ${env.BUILD_URL} for further information"
+                );
+                }
+            }
+         success {
+             script {
+                mail (to: 'vasucena145@gmail.com',
+                        subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) success.",
+                        body: "Please visit ${env.BUILD_URL} for further information.",
+
+
+                  );
+                }
+          }      
+    }
     stage('Slack Notification'){
     slackSend baseUrl: 'https://hooks.slack.com/services/', 
     channel: 'jenkins-pipeline', color: 'good', 
@@ -19,25 +40,8 @@
      teamDomain: 'esafe build notification', 
      tokenCredentialId: 'slack-notification'
     }
-       stage('Download') {
-            steps {
-                sh 'echo "artifact file" > generatedFile.txt'
-            }
-        }
+      
     
-    post {
-        always {
-            archiveArtifacts artifacts: 'generatedFile.txt', onlyIfSuccessful: true
-            
-            echo 'I will always say Hello again!'
-                
-            emailext attachLog: true, attachmentsPattern: 'generatedFile.txt',
-                body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
-                recipientProviders: [developers(), requestor()],
-                subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
-            
-        }
-    }
 }
 
 
