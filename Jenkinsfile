@@ -9,8 +9,15 @@
    }
     stage('Email Notification'){
        mail bcc: '', body: '''Hi welcome to jenkins email alerts
-        Thanks
-        seenu''', cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: '', subject: 'Jenkins Job', to: 'vasucena145@gmail.com'
+       Thanks
+       seenu''', cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: '', subject: 'Jenkins Job', to: 'vasucena145@gmail.com'
+    }
+    stage('Slack Notification'){
+    slackSend baseUrl: 'https://hooks.slack.com/services/', 
+    channel: 'jenkins-pipeline', color: 'good', 
+     message: 'welcome to Jenkins slack', 
+     teamDomain: 'esafe build notification', 
+     tokenCredentialId: 'slack-notification'
     }
 }
 
