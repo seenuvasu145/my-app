@@ -20,6 +20,17 @@
      teamDomain: 'esafe build notification', 
      tokenCredentialId: 'slack-notification'
     }
+    stage('Send email') {
+    def mailRecipients = "vasucena145@gmail.com"
+    def jobName = currentBuild.fullDisplayName
+
+    emailext body: '''${SCRIPT, template="groovy-html.template"}''',
+        mimeType: 'text/html',
+        subject: "[Jenkins] ${jobName}",
+        to: "${mailRecipients}",
+        replyTo: "${mailRecipients}",
+        recipientProviders: [[$class: 'CulpritsRecipientProvider']]
+}
 }
 
 
