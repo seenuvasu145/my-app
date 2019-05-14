@@ -22,9 +22,8 @@
      tokenCredentialId: 'slack-notification'
     }
     stage('Send attachement file '){
-   emailext attachLog: true, body: '', 
-    compressLog: true, recipientProviders: [developers()], 
-    subject: 'Welcome to jenkins email alerts', to: 'vasucena145@gmail.com'
+     emailext attachLog: true, body: '', 
+      compressLog: true, subject: 'Welcome to jenkins email alerts', to: 'vasucena145@gmail.com'
     }
 }
 
