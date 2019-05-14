@@ -12,6 +12,11 @@
        Thanks
        seenu''', cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: '', subject: 'Jenkins Job', to: 'vasucena145@gmail.com'
     }
+     stage('actions'){
+        emailext body: '''${SCRIPT, template="build-report.groovy"}''',
+                subject: "[Jenkins] REPORT",
+                to: "vasucena145@gmail.com"
+    }
     
     stage('Slack Notification'){
     slackSend baseUrl: 'https://hooks.slack.com/services/', 
@@ -20,17 +25,7 @@
      teamDomain: 'esafe build notification', 
      tokenCredentialId: 'slack-notification'
     }
-    stage('Send email') {
-    def mailRecipients = "vasucena145@gmail.com"
-    def jobName = currentBuild.fullDisplayName
-
-    emailext body: '''${SCRIPT, template="groovy-html.template"}''',
-        mimeType: 'text/html',
-        subject: "[Jenkins] ${jobName}",
-        to: "${mailRecipients}",
-        replyTo: "${mailRecipients}",
-        recipientProviders: [[$class: 'CulpritsRecipientProvider']]
-}
+    
 }
 
 
