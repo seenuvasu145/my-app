@@ -39,8 +39,6 @@
      teamDomain: 'esafe build notification', 
      tokenCredentialId: 'slack-notification'
     }
-      
-    
 }
 
 
