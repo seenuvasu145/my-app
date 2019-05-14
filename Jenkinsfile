@@ -23,8 +23,7 @@
     }
     stage('Send attachement file '){
     emailext attachLog: true, body: '', 
-    compressLog: true, recipientProviders: [developers(), requestor()],
-    subject: 'Welcome to jenkins email alerts', to: 'vasucena145@gmail.com'
+    compressLog: true, subject: 'Welcome to jenkins email alerts', to: 'vasucena145@gmail.com'
     }
 }
 
