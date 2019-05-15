@@ -6,19 +6,33 @@
     
       def mvnHome =  tool name: 'maven-3', type: 'maven'   
       sh "${mvnHome}/bin/mvn package"
-   }   
-   stage('Slack Notification'){
-    slackSend baseUrl: 'https://hooks.slack.com/services/', 
-    channel: 'jenkins-pipeline', color: 'good', 
-     message: 'welcome to Jenkins slack', 
-     teamDomain: 'esafe build notification', 
-     tokenCredentialId: 'slack-notification'
+   }
+            stage('Testing') {
+            steps {
+                sh 'chmod +x mvnw'
+                sh './mvnw clean verify serenity:aggregate'
+            }
+        }
     }
-    stage('Send attachement file '){
-     emailext attachLog: true, body: "${currentBuild.result}: ${BUILD_URL}", 
-      compressLog: true, subject: "Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}", to: 'vasucena145@gmail.com'
-    }
-   
-}
+    post {
+        failure {
+            script {
+                mail (to: 'email@gmail.com',
+                        subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
+                        body: "Please visit ${env.BUILD_URL} for further information"
+                );
+                }
+            }
+         success {
+             script {
+                mail (to: 'email@gmail.com',
+                        subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) success.",
+                        body: "Please visit ${env.BUILD_URL} for further information.",
 
+
+                  );
+                }
+          }      
+ 
+  }
 
