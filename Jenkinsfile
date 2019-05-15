@@ -8,9 +8,8 @@ node{
       sh "${mvnHome}/bin/mvn package"
    }  
     stage('Email Notification'){
-     mail bcc: '', body: "${currentBuild.result}: ${BUILD_URL}"
-     Thanks
-     seenu''', cc: 'mohamed.sadiqh@gmail.com', from: '', 
-     replyTo: '', ""Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}", to: 'vasucena145@gmail.com'
+     mail bcc: '', body: '${currentBuild.result}: ${BUILD_URL}', 
+        cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: 'seenuvau145@gmail.com', 
+        subject: 'Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}', to: 'vasucena145@gmail.com'
     }
 }
