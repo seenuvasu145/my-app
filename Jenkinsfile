@@ -13,5 +13,4 @@ node{
      seenu''', cc: 'mohamed.sadiqh@gmail.com', from: '', 
      replyTo: '', ""Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}", to: 'vasucena145@gmail.com'
     }
-   
 }
