@@ -7,19 +7,6 @@
       def mvnHome =  tool name: 'maven-3', type: 'maven'   
       sh "${mvnHome}/bin/mvn package"
    }
-    stage('save log build') {
-    steps {
-        script {
-            def logContent = Jenkins.getInstance()
-                .getItemByFullName(env.JOB_NAME)
-                .getBuildByNumber(
-                    Integer.parseInt(env.BUILD_NUMBER))
-                .logFile.text
-            // copy the log in the job's own workspace
-            writeFile file: "buildlog.txt", text: logContent
-        }
-    }
-}
    
     stage('Email Notification'){
        mail bcc: '', body: '''Hi welcome to jenkins email alerts
@@ -34,10 +21,18 @@
      teamDomain: 'esafe build notification', 
      tokenCredentialId: 'slack-notification'
     }
+    
+     stage('attachement'){
+    emailext
+     body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+     recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+     subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
+    }
     stage('Send attachement file '){
      emailext attachLog: true, body: '', 
       compressLog: true, subject: 'Welcome to jenkins email alerts', to: 'vasucena145@gmail.com'
     }
+   
 }
 
 
