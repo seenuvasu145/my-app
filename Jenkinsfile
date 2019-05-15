@@ -21,16 +21,9 @@
      teamDomain: 'esafe build notification', 
      tokenCredentialId: 'slack-notification'
     }
-    
-     stage('attachement'){
-    emailext
-     body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
-     recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
-     subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
-    }
     stage('Send attachement file '){
-     emailext attachLog: true, body: '', 
-      compressLog: true, subject: 'Welcome to jenkins email alerts', to: 'vasucena145@gmail.com'
+     emailext attachLog: true, body: "${currentBuild.result}: ${BUILD_URL}", 
+      compressLog: true, subject: "Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}", to: 'vasucena145@gmail.com'
     }
    
 }
