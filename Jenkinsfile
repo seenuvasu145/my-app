@@ -7,6 +7,25 @@
       def mvnHome =  tool name: 'maven-3', type: 'maven'   
       sh "${mvnHome}/bin/mvn package"
    }
+    stage('Download') {
+            steps {
+                sh 'echo "artifact file" > generatedFile.txt'
+            }
+        }
+    
+    post {
+        always {
+            archiveArtifacts artifacts: 'generatedFile.txt', onlyIfSuccessful: true
+            
+            echo 'I will always say Hello again!'
+                
+            emailext attachLog: true, attachmentsPattern: 'generatedFile.txt',
+                body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+                recipientProviders: [developers(), requestor()],
+                subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
+            
+        }
+    }
    
     stage('Email Notification'){
        mail bcc: '', body: '''Hi welcome to jenkins email alerts
