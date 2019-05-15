@@ -9,7 +9,7 @@ node{
    }  
     stage('Email Notification'){
      mail bcc: '', body: '${currentBuild.result}: ${BUILD_URL}', 
-        cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: 'seenuvau145@gmail.com', 
+        cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: 'vaucena145@gmail.com', 
         subject: 'Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}', to: 'vasucena145@gmail.com'
     }
 }
