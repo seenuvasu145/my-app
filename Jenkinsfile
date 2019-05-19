@@ -11,6 +11,13 @@ node{
      mail bcc: '', body: 'Welcome to jenkins notification alert', 
         cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: '', subject: 'Jenkins job', to: 'vasucena145@gmail.com'
     }
+   stage('Slack Notification'){
+    slackSend baseUrl: 'https://hooks.slack.com/services/', 
+    channel: 'jenkins-pipeline', color: 'good', 
+     message: 'welcome to Jenkins slack', 
+     teamDomain: 'esafe build notification', 
+     tokenCredentialId: 'slack-notification'
+    }
    stage('Attachment Log'){
    emailext attachLog: true, body: '${currentBuild.result}: ${BUILD_URL}', 
       compressLog: true, replyTo: 'mohamed.sadiqh@gmail.com', 
