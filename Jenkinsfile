@@ -12,10 +12,9 @@ node{
         cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: '', subject: 'Jenkins job', to: 'vasucena145@gmail.com'
     }
    stage('Slack Notification'){
-    slackSend baseUrl: 'https://hooks.slack.com/services/',
-      subject: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", 
+    slackSend baseUrl: 'https://hooks.slack.com/services/', 
       channel: 'jenkins-pipeline', color: 'good', 
-     message: "The pipeline ${currentBuild.fullDisplayName} completed successfully.", 
+     message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", 
      teamDomain: 'esafe build notification', 
      tokenCredentialId: 'slack-notification'
     }
