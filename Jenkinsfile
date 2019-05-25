@@ -16,7 +16,10 @@ node{
       channel: 'jenkins-pipeline', color: 'good', 
      message:"${currentBuild.result}: ${BUILD_URL} ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}", 
      teamDomain: 'esafe build notification', 
-     tokenCredentialId: 'slack-notification'
+     tokenCredentialId: 'slack-notification',
+     body: '${currentBuild.result}: ${BUILD_URL}',
+     subject: 'Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}'
+       
     }
    stage('Attachment Log'){
    emailext attachLog: true, body: '${currentBuild.result}: ${BUILD_URL}', 
