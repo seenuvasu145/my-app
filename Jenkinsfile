@@ -14,7 +14,7 @@ node{
    stage('Slack Notification'){
     slackSend baseUrl: 'https://hooks.slack.com/services/', 
       channel: 'jenkins-pipeline', color: 'good', 
-     message:"Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}" , 
+     message:"Build Notification: ${currentBuild.result}: ${BUILD_URL} ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}" , 
      teamDomain: 'esafe build notification', 
      tokenCredentialId: 'slack-notification'
     }
