@@ -10,6 +10,14 @@ node{
     stage('Email Notification'){
      mail bcc: '', body: 'Welcome to jenkins notification alert', 
         cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: '', subject: 'Jenkins job', to: 'vasucena145@gmail.com'
+        post {
+    failure {
+      // notify users when the Pipeline fails
+      mail to: 'vasucena145@gmail.com',
+          subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+          body: "Something is wrong with ${env.BUILD_URL}"
+    }
+  }
     }
    stage('Slack Notification'){
     slackSend baseUrl: 'https://hooks.slack.com/services/', 
@@ -21,14 +29,7 @@ node{
      subject: 'Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}'
        
     }
-    post {
-    failure {
-      // notify users when the Pipeline fails
-      mail to: 'vasucena145@gmail.com',
-          subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-          body: "Something is wrong with ${env.BUILD_URL}"
-    }
-  }
+   
    stage('Attachment Log'){
    emailext attachLog: true, body: '${currentBuild.result}: ${BUILD_URL}', 
       compressLog: true, replyTo: 'mohamed.sadiqh@gmail.com', 
