@@ -7,33 +7,37 @@ node{
       def mvnHome =  tool name: 'maven-3', type: 'maven'   
       sh "${mvnHome}/bin/mvn package"
    }  
-    stage('Email Notification'){
-     mail bcc: '', body: 'Welcome to jenkins notification alert', 
-        cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: '', subject: 'Jenkins job', to: 'vasucena145@gmail.com'
-        post {
+       stage ('Start') {
+      steps {
+        // send to email
+        emailext (
+            subject: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+            body: """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+              <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+            recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+          )
+      }
+    }
+    /* ... unchanged ... */
+  }
+  post {
+    success {
+
+      emailext (
+          subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+          body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+            <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+          recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+        )
+    }
+
     failure {
-      // notify users when the Pipeline fails
-      mail to: 'vasucena145@gmail.com',
-          subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-          body: "Something is wrong with ${env.BUILD_URL}"
+
+      emailext (
+          subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+          body: """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+            <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+          recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+        )
     }
   }
-    }
-   stage('Slack Notification'){
-    slackSend baseUrl: 'https://hooks.slack.com/services/', 
-      channel: 'jenkins-pipeline', color: 'good', 
-     message:"${currentBuild.result}: ${BUILD_URL} ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}", 
-     teamDomain: 'esafe build notification', 
-     tokenCredentialId: 'slack-notification',
-     body: '${currentBuild.result}: ${BUILD_URL}',
-     subject: 'Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}'
-       
-    }
-   
-   stage('Attachment Log'){
-   emailext attachLog: true, body: '${currentBuild.result}: ${BUILD_URL}', 
-      compressLog: true, replyTo: 'mohamed.sadiqh@gmail.com', 
-      subject: 'Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}', to: 'vasucena145@gmail.com'
-   }
-
-}
