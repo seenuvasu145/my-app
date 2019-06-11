@@ -1,43 +1,32 @@
 node{
-   stage('SCM Checkout'){
-     git 'https://github.com/seenuvasu145/my-app.git'
-   }
-   stage('Compile-Package'){
-    
-      def mvnHome =  tool name: 'maven-3', type: 'maven'   
-      sh "${mvnHome}/bin/mvn package"
-   }  
-       stage ('Start') {
-      steps {
-        // send to email
-        emailext (
-            subject: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-            body: """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-              <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-            recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-          )
-      }
-    }
-    /* ... unchanged ... */
-  }
-  post {
-    success {
+    stage('SCM Checkout'){
+         git 'https://github.com/seenuvasu145/my-app.git'
+}
+    stage('Compile-Package'){
 
-      emailext (
-          subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-          body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-            <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-          recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-        )
-    }
+         def mvnHome = tool name: 'maven-3', type: 'maven' 
+         sh "${mvnHome}/bin/mvn package"
+} 
+    stage('Email Notification'){
+          mail bcc: '', body: 'Welcome to jenkins notification alert', 
+          cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: '', subject: 'Jenkins job', to: 'vasucena145@gmail.com'
 
-    failure {
+}
+     stage('Slack Notification'){
+           slackSend baseUrl: 'https://hooks.slack.com/services/', 
+           channel: 'jenkins-pipeline', color: 'good', 
+           message:"${currentBuild.result}: ${BUILD_URL} ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}", 
+           teamDomain: 'esafe build notification', 
+           tokenCredentialId: 'slack-notification',
+           body: '${currentBuild.result}: ${BUILD_URL}',
+           subject: 'Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}'
 
-      emailext (
-          subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-          body: """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-            <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-          recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-        )
-    }
-  }
+}
+
+    stage('Attachment Log'){
+          emailext attachLog: true, body: '${currentBuild.result}: ${BUILD_URL}', 
+          compressLog: true, replyTo: 'mohamed.sadiqh@gmail.com', 
+          subject: 'Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}', to: 'vasucena145@gmail.com'
+}
+
+}
