@@ -13,14 +13,11 @@ node{
 
 }
      stage('Slack Notification'){
-           slackSend baseUrl: 'https://hooks.slack.com/services/', 
-           channel: 'jenkins-pipeline', color: 'good', 
-           message:"${currentBuild.result}: ${BUILD_URL} ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}", 
-           teamDomain: 'esafe build notification', 
-           tokenCredentialId: 'slack-notification',
-           body: '${currentBuild.result}: ${BUILD_URL}',
-           subject: 'Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}'
-
+          slackSend baseUrl: 'https://esafeworkspace.slack.com/services/hooks/jenkins-ci/', 
+              channel: 'pipeline', color: '"#439FE0", message: "Build Started: ${env.JOB_NAME} ${env.BUILD_NUMBER}"', 
+              failOnError: true, message: 'Welcome to Jenkin Slack!', 
+              teamDomain: 'esafe build notification', token: 'HLIX5MlkTiW9WTeeYMSR14eL', 
+              tokenCredentialId: 'jenkins-slack-notification'
 }
 
     stage('Attachment Log'){
