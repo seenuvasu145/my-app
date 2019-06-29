@@ -14,9 +14,9 @@ node{
 }
      stage('Slack Notification'){
           slackSend baseUrl: 'https://esafeworkspace.slack.com/services/hooks/jenkins-ci/', 
-              channel: 'pipeline', color: '"#439FE0", message: "Build Started: ${env.JOB_NAME} ${env.BUILD_NUMBER}"', 
+              channel: '#pipeline', color: '"#439FE0", message: "Build Started: ${env.JOB_NAME} ${env.BUILD_NUMBER}"', 
               failOnError: true, message: 'Welcome to Jenkin Slack!', 
-              teamDomain: 'esafe build notification', token: 'HLIX5MlkTiW9WTeeYMSR14eL', 
+              teamDomain: 'esafe build notification', 
               tokenCredentialId: 'jenkins-slack-notification'
 }
 
