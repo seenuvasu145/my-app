@@ -12,7 +12,7 @@ node{
     		def uploadSpec = """{
     		"files": [
     		{
-     		"pattern": "target/*.war",
+     		"pattern": "target/myweb-0.0.5.war",
      		"target": "Esafe-Project/${BUILD_NUMBER}/",
 	 	"props": "Integration-Tested=Yes;Performance-Tested=No"
    		}
@@ -20,27 +20,5 @@ node{
 		}"""
 		server.upload(uploadSpec)
 	}
-	stash includes: 'target/*.war,src/pt/Hello_World_Test_Plan.jmx', name: 'binary'
-}
-    stage('Email Notification'){
-          mail bcc: '', body: 'Welcome to jenkins notification alert', 
-          cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: '', subject: 'Jenkins job', to: 'vasucena145@gmail.com'
-
-}
-     stage('Slack Notification'){
-           slackSend baseUrl: 'https://esafeworkspace.slack.com/services/hooks/jenkins-ci/', 
-           channel: '#pipeline', color: 'good', 
-           message:"${currentBuild.result}: ${BUILD_URL} ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}", 
-           teamDomain: 'esafe build notification', 
-           tokenCredentialId: 'jenkins-slack-notification',
-           body: '${currentBuild.result}: ${BUILD_URL}',
-           subject: 'Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}'
-
-}
-
-    stage('Attachment Log'){
-          emailext attachLog: true, body: '${currentBuild.result}: ${BUILD_URL}', 
-          compressLog: true, replyTo: 'mohamed.sadiqh@gmail.com', 
-          subject: 'Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}', to: 'vasucena145@gmail.com'
- }
+	stash includes: 'target/myweb-0.0.5.war,src/pt/Hello_World_Test_Plan.jmx', name: 'binary'
 }
