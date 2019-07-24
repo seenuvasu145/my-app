@@ -13,6 +13,21 @@ node{
           sh "${mvnHome}/bin/mvn sonar:sonar"
         }
 }
+    stage ('Publish'){
+    		def server = Artifactory.server 'Default Artifactory Server(centos)'
+    		def uploadSpec = """{
+    		"files": [
+    		{
+     		"pattern": "target/*.war",
+     		"target": "Esafe-Project/${BUILD_NUMBER}/",
+	 	"props": "Integration-Tested=Yes;Performance-Tested=No"
+   		}
+           	]
+		}"""
+		server.upload(uploadSpec)
+	}
+	stash includes: 'target/*.war,src/pt/Hello_World_Test_Plan.jmx', name: 'binary'
+}
     stage('Email Notification'){
           mail bcc: '', body: 'Welcome to jenkins notification alert', 
           cc: 'mohamed.sadiqh@gmail.com', from: '', replyTo: '', subject: 'Jenkins job', to: 'vasucena145@gmail.com'
