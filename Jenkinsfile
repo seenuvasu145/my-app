@@ -7,12 +7,6 @@ node{
          def mvnHome = tool name: 'MAVEN', type: 'maven' 
          sh "${mvnHome}/bin/mvn package"
 } 
-     stage('SonarQube Analysis') {
-        def mvnHome =  tool name: 'MAVEN', type: 'maven'
-        withSonarQubeEnv('Default SonarQube Server') { 
-          sh "${mvnHome}/bin/mvn sonar:sonar"
-        }
-}
     stage ('Publish'){
     		def server = Artifactory.server 'Default Artifactory Server(centos)'
     		def uploadSpec = """{
