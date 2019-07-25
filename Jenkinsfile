@@ -20,5 +20,4 @@ node{
 		}"""
 		server.upload(uploadSpec)
 	}
-	stash includes: 'target/myweb-0.0.5.war,src/pt/Hello_World_Test_Plan.jmx', name: 'binary'
 }
