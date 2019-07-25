@@ -23,7 +23,7 @@ node{
 	 stash includes: 'target/myweb-0.0.5.war,src/pt/Hello_World_Test_Plan.jmx', name: 'binary'
 
      stage ('Copy warfile to Ansibleserver'){
-           def server = Artifactory.server 'Default Artifactory Server'
+           def server = Artifactory.server 'Default Artifactory Server(centos)'
            def downloadSpec = """{
            "files": [
            {
