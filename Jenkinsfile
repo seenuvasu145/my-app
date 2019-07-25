@@ -22,3 +22,19 @@ node{
 	}
 	 stash includes: 'target/myweb-0.0.5.war,src/pt/Hello_World_Test_Plan.jmx', name: 'binary'
 }
+node ('Ansible') {
+      stage ('Copy warfile to Ansibleserver'){
+           def server = Artifactory.server 'Default Artifactory Server'
+           def downloadSpec = """{
+           "files": [
+           {
+           "pattern": "Esafe-Project/$BUILD_NUMBER/*.war",
+           "target": "/opt/ansible/",
+           "props": "Performance-Tested=Yes;Integration-Tested=Yes",
+           "flat": "true"
+           }
+           ]
+           }"""
+           server.download(downloadSpec)
+           }
+}
