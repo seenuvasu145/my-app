@@ -35,4 +35,4 @@ node{
            ]
            }"""
            server.download(downloadSpec)
-       }
+    }
