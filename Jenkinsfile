@@ -21,8 +21,7 @@ node{
 		server.upload(uploadSpec)
 	}
 	 stash includes: 'target/myweb-0.0.5.war,src/pt/Hello_World_Test_Plan.jmx', name: 'binary'
-}
-node ('Ansible-2.8.2') {
+
       stage ('Copy warfile to Ansibleserver'){
            def server = Artifactory.server 'Default Artifactory Server'
            def downloadSpec = """{
@@ -36,5 +35,4 @@ node ('Ansible-2.8.2') {
            ]
            }"""
            server.download(downloadSpec)
-           }
-}
+       }
