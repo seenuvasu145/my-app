@@ -1,5 +1,9 @@
 node {
-  stage('Run Playbook'){
-	sh 'ansible-playbook /opt/ansible/copywarfile.yml'
+   stages {	
+       stage('Run Playbook'){
+	 steps {     
+	     sh 'ansible-playbook /opt/ansible/copywarfile.yml'
 	}
+     }
+   }
 }
