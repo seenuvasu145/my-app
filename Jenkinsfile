@@ -5,7 +5,7 @@ node {
              "files": [
               {
               "pattern": "Esafe-Project/$BUILD_NUMBER/*.war",
-              "target": "/opt/ansible/",
+              "target": "//opt//ansible//",
               "props": "Performance-Tested=Yes;Integration-Tested=Yes",
               "flat": "true"
                }
