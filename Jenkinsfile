@@ -1,23 +1,22 @@
 node{
-   stage('SCM Checkout'){
-     git 'https://github.com/javahometech/my-app'
+    stage('SCM Checkout'){
+         git 'https://github.com/seenuvasu145/myapp.git'
+      }
+    stage('Compile-Package'){
+
+         def mvnHome = tool name: 'maven-3', type: 'maven' 
+         sh "${mvnHome}/bin/mvn package"
+     } 
+    
+   stage('My Conditional Stage') {
+    when (BRANCH_NAME != 'master') {
+        echo 'Only on master branch.'
+      }
+    }
+  stage('Attachment Log'){
+          emailext attachLog: true, body: '${currentBuild.result}: ${BUILD_URL}', 
+          compressLog: true, replyTo: 'mohamed.sadiqh@gmail.com', 
+          subject: 'Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}', to: 'vasucena145@gmail.com'
    }
-   stage('Compile-Package'){
-      // Get maven home path
-      def mvnHome =  tool name: 'maven-3', type: 'maven'   
-      sh "${mvnHome}/bin/mvn package"
-   }
-   stage('Email Notification'){
-      mail bcc: '', body: '''Hi Welcome to jenkins email alerts
-      Thanks
-      Hari''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job', to: 'hari.kammana@gmail.com'
-   }
-   stage('Slack Notification'){
-       slackSend baseUrl: 'https://hooks.slack.com/services/',
-       channel: '#jenkins-pipeline-demo',
-       color: 'good', 
-       message: 'Welcome to Jenkins, Slack!', 
-       teamDomain: 'javahomecloud',
-       tokenCredentialId: 'slack-demo'
-   }
+
 }
