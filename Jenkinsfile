@@ -1,20 +1,17 @@
-node {
-	stage('Deploy to ansiblesaerver'){
-             def server = Artifactory.server 'Default Artifactory Server'
-             def downloadSpec = """{
-             "files": [
-              {
-              "pattern": "Esafe-Project/$BUILD_NUMBER/*.war",
-              "target": "//opt//ansible//",
-              "props": "Performance-Tested=Yes;Integration-Tested=Yes",
-              "flat": "true"
-               }
-               ]
-               }"""
-               server.download(downloadSpec)
-          }
-       stage('Run Playbook'){
-	   
-	     sh 'ansible-playbook /opt/ansible/copywarfile.yml'
-	}
+node{
+    stage('SCM Checkout'){
+         git 'https://github.com/seenuvasu145/myapp.git'
+}
+    stage('Compile-Package'){
+
+         def mvnHome = tool name: 'maven-3', type: 'maven' 
+         sh "${mvnHome}/bin/mvn package"
+} 
+    
+    stage('Attachment Log'){
+          emailext attachLog: true, body: '${currentBuild.result}: ${BUILD_URL}', 
+          compressLog: true, replyTo: 'mohamed.sadiqh@gmail.com', 
+          subject: 'Build Notification: ${JOB_NAME}-Build# ${BUILD_NUMBER} ${currentBuild.result}', to: 'vasucena145@gmail.com'
+}
+
 }
