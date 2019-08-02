@@ -1,3 +1,5 @@
+properties([parameters([choice(choices: 'master\nfeature-1\nfeature-2', description: 'Select Branch to build', name: 'branch')])])
+
 node{
     stage('SCM Checkout'){
          git 'https://github.com/seenuvasu145/myapp.git'
